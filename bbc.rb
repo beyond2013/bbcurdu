@@ -17,7 +17,6 @@ end
 
 def scrap(url_array)
 	url_array.each do |element|
-		puts element
 		encoded_url = URI.encode(element)
 		doc = Nokogiri::HTML(open(encoded_url))
 		article =""
@@ -38,7 +37,7 @@ def scrap(url_array)
 				article +=  "#{node.child}\n"
 			end
 		end
-		writeToFile(article, encoded_url[/\w+-\d+/])
+		writeToFile(article, encoded_url[/\w+-\d+/]) if article.length > 1000
 	end
 end
 
