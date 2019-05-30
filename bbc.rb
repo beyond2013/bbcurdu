@@ -12,7 +12,7 @@ def gather_url(url)
 		complete_url = base_url + rarticle.value
 	  url_array << complete_url	
 	end
- scrap(url_array)
+	return url_array
 end
 
 def scrap(url_array)
@@ -38,24 +38,23 @@ def scrap(url_array)
 				article +=  "#{node.child}\n"
 			end
 		end
-		writeToFile(article)
+		writeToFile(article, encoded_url[/\w+-\d+/])
 	end
 end
 
 
-def writeToFile(contents)
-filename = "./data/"
-print "Enter file name to save the contents of news article: \t"
-filename << gets.chomp
-filename << ".txt"
-fh = File.new(filename.chomp, "w")
-fh.puts contents
-fh.close
-puts "contents written to file #{filename}" 
+def writeToFile(contents, filename)
+	path = "./data/"
+	filename = path.concat(filename).concat(".txt")
+	fh = File.new(filename.chomp, "w")
+	fh.puts contents
+	fh.close
+	puts "contents written to file #{filename}" 
 end
 
 
 print "Enter url of the bbc news article:"
 url = gets.chomp
-gather_url(url)
+url_array = gather_url(url)
+scrap(url_array)
 
