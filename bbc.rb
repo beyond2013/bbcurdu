@@ -44,11 +44,13 @@ end
 
 def writeToFile(contents, filename)
 	path = "./data/"
-	filename = path.concat(filename).concat(".txt")
-	fh = File.new(filename.chomp, "w")
-	fh.puts contents
-	fh.close
-	puts "contents written to file #{filename}" 
+	if !filename.nil?
+		filename = path.concat(filename).concat(".txt")  
+		fh = File.new(filename.chomp, "w")
+		fh.puts contents
+		fh.close
+		puts "contents written to file #{filename}" 
+	end
 end
 
 
