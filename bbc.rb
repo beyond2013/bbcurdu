@@ -4,7 +4,12 @@ require 'open-uri'
 
 def gather_url(url)
 	encoded_url = URI.encode(url)
-	doc = Nokogiri::HTML(open(encoded_url))
+	begin
+		doc = Nokogiri::HTML(open(encoded_url))
+	rescue SocketError => e
+		p e.class
+		puts "Failed to open url:#{encoded_url}"
+	end
 	base_url = "https://www.bbc.com"
 	url_array = [encoded_url]
 	relatedArticles = doc.search("//ul[@class='units-list ']/li/a/@href")
@@ -18,7 +23,13 @@ end
 def scrap(url_array)
 	url_array.each do |element|
 		encoded_url = URI.encode(element)
-		doc = Nokogiri::HTML(open(encoded_url))
+    begin
+			doc = Nokogiri::HTML(open(encoded_url))
+		rescue SocketError => e
+			p e.class
+			puts "Failed to open url:#{encoded_url}"
+			next
+		end
 		article =""
 		node = doc.search("//div[@class='story-body']/h1")
 		article +="#{node.text}\n"
